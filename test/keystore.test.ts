@@ -1,28 +1,28 @@
 import { expect, describe, it, beforeAll } from 'vitest';
 import { createWalletClient, http, type WalletClient, verifyMessage, verifyTypedData, parseEther } from 'viem';
 import { anvil } from 'viem/chains';
-import { keystoreAccount, decryptKeystore } from '../src';
+import { keystoreAccount } from '../src';
 
-describe('Web3Signer Integration', () => {
+describe('Keystore Integration', () => {
   let client: WalletClient;
 
   beforeAll(() => {
     client = createWalletClient({
       chain: anvil,
       transport: http(),
-      account: keystoreAccount,
+      account: keystoreAccount(),
     });
   });
 
   it('should sign a message using the client', async () => {
-    const message = 'Hello Web3Signer';
+    const message = 'Hello Keystore';
     const signature = await client.signMessage({
       message,
-      account: keystoreAccount
+      account: keystoreAccount()
     });
 
     const isValid = await verifyMessage({
-      address: keystoreAccount.address,
+      address: keystoreAccount().address,
       message,
       signature
     });
@@ -44,11 +44,11 @@ describe('Web3Signer Integration', () => {
     };
 
     const message = {
-      text: 'Hello Web3Signer!'
+      text: 'Hello Keystore!'
     };
 
     const signature = await client.signTypedData({
-      account: keystoreAccount,
+      account: keystoreAccount(),
       domain,
       types,
       primaryType: 'Message',
@@ -56,7 +56,7 @@ describe('Web3Signer Integration', () => {
     });
 
     const isValid = await verifyTypedData({
-      address: keystoreAccount.address,
+      address: keystoreAccount().address,
       domain,
       types,
       primaryType: 'Message',
@@ -69,7 +69,7 @@ describe('Web3Signer Integration', () => {
 
   it('should send an ether transaction', async () => {
     const request = await client.prepareTransactionRequest({
-      account: keystoreAccount,
+      account: keystoreAccount(),
       to: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
       value: parseEther("0.01"),
       chain: anvil
