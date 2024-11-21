@@ -15,6 +15,7 @@
     "vitest": "^2.1.5"
   },
   "dependencies": {
+    "@ethereumjs/wallet": "^2.0.4",
     "dotenv": "^16.4.5",
     "viem": "^2.21.47"
   }

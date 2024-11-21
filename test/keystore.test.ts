@@ -6,11 +6,11 @@ import { keystoreAccount } from '../src';
 describe('Keystore Integration', () => {
   let client: WalletClient;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     client = createWalletClient({
       chain: anvil,
       transport: http(),
-      account: keystoreAccount(),
+      account: await keystoreAccount(),
     });
   });
 
@@ -18,11 +18,11 @@ describe('Keystore Integration', () => {
     const message = 'Hello Keystore';
     const signature = await client.signMessage({
       message,
-      account: keystoreAccount()
+      account: await keystoreAccount()
     });
 
     const isValid = await verifyMessage({
-      address: keystoreAccount().address,
+      address: (await keystoreAccount()).address,
       message,
       signature
     });
@@ -48,7 +48,7 @@ describe('Keystore Integration', () => {
     };
 
     const signature = await client.signTypedData({
-      account: keystoreAccount(),
+      account: await keystoreAccount(),
       domain,
       types,
       primaryType: 'Message',
@@ -56,7 +56,7 @@ describe('Keystore Integration', () => {
     });
 
     const isValid = await verifyTypedData({
-      address: keystoreAccount().address,
+      address: (await keystoreAccount()).address,
       domain,
       types,
       primaryType: 'Message',
@@ -69,7 +69,7 @@ describe('Keystore Integration', () => {
 
   it('should send an ether transaction', async () => {
     const request = await client.prepareTransactionRequest({
-      account: keystoreAccount(),
+      account: await keystoreAccount(),
       to: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
       value: parseEther("0.01"),
       chain: anvil
